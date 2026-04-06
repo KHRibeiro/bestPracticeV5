@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+	<link rel="icon" href="simb.ico" type="image/x-icon">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="style.css">
+  <title>Best Practice Detail</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <style>
+
+/* Layout principal em duas colunas */
+.layout {
+  display: flex;
+  height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 200px;
+  background-color: #9AB6DE;
+  padding-top: 60px;
+  transition: width 0.3s ease;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar.collapsed {
+  width: 60px;
+}
+
+.sidebar a {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  text-decoration: none;
+  font-size: 18px;
+  color: #fff;
+  white-space: nowrap;
+  transition: background-color 0.2s;
+}
+
+.sidebar a:hover {
+  background-color: #575757;
+}
+
+.sidebar a span:first-child {
+  width: 30px;
+  text-align: center;
+}
+
+.sidebar .link-text {
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+.sidebar.collapsed .link-text {
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  overflow: hidden;
+}
+
+/* Conteúdo principal */
+main {
+  flex: 1;
+  padding: 20px;
+  transition: margin-left 0.3s ease;
+  overflow-y: auto;
+}
+
+/* Botão para abrir sidebar */
+.openbtn {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 1100;
+  font-size: 20px;
+  cursor: pointer;
+  background-color: #9AB6DE;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+}
+
+
+		
+body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f4f6f8;
+    }
+    header {
+      background: #9AB6DE;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    nav {
+      background: #34495e;
+      padding: 0.5rem;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+    }
+    nav a {
+      margin: 0 1em;
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    main {
+      padding: 2em;
+    }
+	    
+  </style>
+  <link rel="stylesheet" href="theme.css">
+</head>
+<body>
+
+  <header>
+  <!-- <img alt="Best Practice Platform Logo" src="lamp_light.png" style="height:150px; background-color:transparent;"/> -->
+<!-- Botão de toggle -->	  
+<button onclick="toggleSidebar()" class="openbtn">☰</button>
+
+<div style="text-align:right; padding:0.5em; font-size:0.9em; color:white">
+
+  👤 <span id="usuario"></span> |
+  🌎 <span id="region"></span> |
+  🔐 <span id="userlvl"></span>
+
+</div>
+	  
+</header>
+
+<!-- Container do layout -->
+<div class="layout">
+  <!-- Sidebar -->
+  <div id="mySidebar" class="sidebar collapsed">
+    <a href="index.html" title="Dashboard">
+  <span><i class="bi bi-speedometer2 text-white"></i></span>
+  <span class="link-text">Dashboard</span>
+</a>
+
+<a href="library.html" title="Library">
+  <span><i class="bi bi-journals text-white"></i></span>
+  <span class="link-text">Library</span>
+</a>
+
+<a href="submission.html" title="Submit">
+  <span><i class="bi bi-upload text-white"></i></span>
+  <span class="link-text">Submit</span>
+</a>
+
+<a href="tracker.html" title="Tracker">
+  <span><i class="bi bi-graph-up-arrow text-white"></i></span>
+  <span class="link-text">Implement</span>
+</a>
+
+<a href="audit.html" title="Audit">
+  <span><i class="bi bi-search text-white"></i></span>
+  <span class="link-text">Audit</span>
+</a>
+
+<a href="admin.html" title="Admin">
+  <span><i class="bi bi-person-gear text-white"></i></span>
+  <span class="link-text">Admin</span>
+</a>
+
+<a href="login.html" title="Login">
+  <span><i class="bi bi-box-arrow-in-right text-white"></i></span>
+  <span class="link-text">Login</span>
+</a>
+
+   <!-- Novo botão de mensagens -->
+  <a href="mail.html" title="Mensagens">
+    <span><i class="bi bi-envelope-fill text-white"></i></span>
+    <span class="link-text">BP Mail</span>
+  </a>
+	  
+    <!-- Botão logout fixado no rodapé -->
+<div class="logout-container">
+    <a href="#" id="logoutBtn" title="Logout">
+    <span><i class="bi bi-box-arrow-right text-white"></i></span>
+    <span class="link-text">Logout</span>
+    </a>
+</div>
+  </div>
+
+<main id="mainContent">
+
+<div class="d-flex justify-content-start align-items-center gap-2 mb-3">
+  <a href="library.html" class="btn btn-primary btn-sm">Back to Library</a>
+  
+  <button class="btn btn-primary btn-sm" onclick="abrirModalGerarPost()" title="Generate Post">
+    <i class="bi bi-megaphone-fill"></i>
+  </button>
+</div>
+	
+<section>
+<h2 id="title">Title of Best Practice</h2>
+</section>
+
+<br>
+<section>
+<strong>Description:</strong>
+<p id="description"></p>
+</section>
+	
+<br>
+<section>
+<strong>Site:</strong>
+<a id="region_plant"></a>
+</section>
+
+<br>
+<section>
+<strong>Attachments:</strong>
+<a id="file_url"></a>
+</section>
+
+<br>
+<section>
+<strong>Implementation Guide:</strong>
+<p id="steps"></p>
+</section>
+	
+<strong>Comments:</strong>	  
+<div class="form-floating" id="commentsContainer"></div> 
+
+<div class="form-floating">
+<textarea class="form-control" placeholder="Leave a comment here" id="commentInput" rows="4" cols="80"></textarea>
+<label class="form-label">Comments</label>
+</div>
+
+<br>
+<button class="btn btn-primary btn-sm" onclick="submitComment()">Submit Comment</button>
+
+<!-- Modal Bootstrap -->
+<div class="modal fade" id="postModal" tabindex="-1" aria-labelledby="postModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="postModalLabel">Generated Post</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-floating">
+          <textarea class="form-control" id="textoGerado" style="height: 250px" placeholder="Generate the post..."></textarea>
+          <label class="form-label">Your post text</label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button class="btn btn-primary" onclick="copiarTexto()">Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+	  
+<!-- <img src="LogoTogether.png" alt="Ramification" class="rounded mx-auto d-block" style="height:200px; background-color:transparent;" /> -->
+	  
+</main>
+</div>
+	  
+<script>
+function toggleSidebar() {
+  const sidebar = document.getElementById("mySidebar");
+  sidebar.classList.toggle("collapsed");
+}
+</script>
+
+<script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+    const supabase = createClient('https://qnxvprptwczutzojjyve.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFueHZwcnB0d2N6dXR6b2pqeXZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM3MzIxMjAsImV4cCI6MjA2OTMwODEyMH0.oBi3ZBvEIBUzsaAPvYRJIhAZlJuetYVMcxFTRs_gBio');
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const logoutBtn = document.getElementById('logoutBtn');
+      logoutBtn.addEventListener('click', async () => {
+        const { error } = await supabase.auth.signOut();
+        if (error) {
+          console.error('Erro ao fazer logout:', error.message);
+        } else {
+          alert('Logout realizado com sucesso!');
+          window.location.href = 'login.html'; // ou outra página desejada
+        }
+      });
+    });
+  </script>
+	
+  <script>
+  function capitalize(str) {
+    if (!str) return "";
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  const user = localStorage.getItem("username");
+  const role = localStorage.getItem("userRole"); // corrigido aqui
+
+  if (user && role) {
+    const formattedUser = capitalize(user);
+    const formattedRole = capitalize(role);
+    document.getElementById("user-info").textContent = `Logged in as: ${formattedUser} (${formattedRole})`;
+  }
+</script>
+
+
+<script type="module">
+ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+
+  const SUPABASE_URL = 'https://qnxvprptwczutzojjyve.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFueHZwcnB0d2N6dXR6b2pqeXZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM3MzIxMjAsImV4cCI6MjA2OTMwODEyMH0.oBi3ZBvEIBUzsaAPvYRJIhAZlJuetYVMcxFTRs_gBio';
+
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // 🧠 Função para buscar a Best Practice pelo ID
+  
+async function fetchBestPractice(id) {
+    const { data, error } = await supabase
+      .from('submissions')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error) {
+      console.error('Erro ao buscar Best Practice:', error);
+      return null;
+    }
+
+    return data;
+  }
+
+  
+async function getCurrentUser() {
+    const { data: { user }, error } = await supabase.auth.getUser();
+    if (error) {
+      console.error('Erro ao obter usuário:', error);
+      return null;
+    }
+    return user;
+  }
+
+  function gerarTexto() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const id = urlParams.get('id');
+
+  // Pega o caminho base do repositório no GitHub Pages
+  const basePath = window.location.pathname.split('/')[1];
+  const linkDetail = `${window.location.origin}/${basePath}/detail.html?id=${id}`;
+
+  const texto = `🚀 *New Best Practice Available!*
+
+We are excited to announce a new Best Practice that aims to raise our standards of excellence! This initiative has been carefully developed to optimize processes, increase efficiency, and ensure consistent results across all units.
+
+📌 *What you'll find:*
+- Clear and measurable objectives
+- Step-by-step implementation guide
+- Deployment map by site
+- Supporting materials such as documents and videos
+
+💬 Your participation is essential! Explore the details, share your feedback, and contribute to our collective success.
+
+👉 ${linkDetail}
+
+#Excellence #Innovation #BestPractices`;
+
+  document.getElementById("textoGerado").value = texto;
+}
+
+
+  function copiarTexto() {
+    const texto = document.getElementById("textoGerado");
+    texto.select();
+    texto.setSelectionRange(0, 99999);
+    document.execCommand("copy");
+    alert("Texto copiado para a área de transferência!");
+  }
+
+  async function verificarEgerarPost() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
+
+    if (!id) {
+      alert('ID da Best Practice não encontrado na URL.');
+      return;
+    }
+
+    const bestPractice = await fetchBestPractice(id);
+    const currentUser = await getCurrentUser();
+
+    if (!bestPractice || !currentUser) {
+      alert('Erro ao carregar dados.');
+      return;
+    }
+
+    // ✅ Comparação por e-mail
+    if (bestPractice.status === 'Approved' && bestPractice.responsible === currentUser.email) {
+      gerarTexto();
+    } else {
+      alert('Você só pode gerar posts de Best Practices aprovadas que você criou.');
+    }
+  }
+
+  // Expor funções para os botões
+  window.verificarEgerarPost = verificarEgerarPost;
+  window.copiarTexto = copiarTexto;
+
+// 🔹 Função para abrir o modal após gerar o post
+async function abrirModalGerarPost() {
+  try {
+    // Executa a verificação e geração do texto
+    await verificarEgerarPost();
+
+    // Verifica se o texto foi realmente gerado
+    const texto = document.getElementById("textoGerado")?.value.trim();
+    if (!texto) return; // nada gerado → não abre modal
+
+    // Abre o modal Bootstrap
+    const modalElement = document.getElementById('postModal');
+    const modal = new bootstrap.Modal(modalElement);
+    modal.show();
+
+  } catch (error) {
+    console.error('Erro ao abrir modal:', error);
+    alert('Erro ao gerar o post.');
+  }
+}
+
+// 🔹 Expõe a função globalmente para funcionar com onclick do HTML
+window.abrirModalGerarPost = abrirModalGerarPost;
+
+</script>
+
+<script type="module">
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+
+  const SUPABASE_URL = 'https://qnxvprptwczutzojjyve.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFueHZwcnB0d2N6dXR6b2pqeXZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM3MzIxMjAsImV4cCI6MjA2OTMwODEyMH0.oBi3ZBvEIBUzsaAPvYRJIhAZlJuetYVMcxFTRs_gBio';
+
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // 👤 Obter usuário atual
+  async function getCurrentUser() {
+    const { data: { user }, error } = await supabase.auth.getUser();
+    if (error) {
+      console.error('Erro ao obter usuário:', error);
+      return null;
+    }
+    return user;
+  }
+
+  // 🗨️ Carregar comentários da prática
+  async function loadComments(submissionId) {
+    const { data, error } = await supabase
+      .from('comments')
+      .select('*')
+      .eq('submission_id', submissionId)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Erro ao carregar comentários:', error);
+      return;
+    }
+
+    const container = document.getElementById('commentsContainer');
+    container.innerHTML = '';
+
+    data.forEach(comment => {
+      const date = new Date(comment.created_at);
+      const formattedDate = date.toLocaleString('pt-BR', {
+        day: '2-digit', month: '2-digit', year: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+      });
+
+      const div = document.createElement('div');
+      div.innerHTML = `<p><strong>${comment.user_email}</strong> <em>(${formattedDate})</em><br>${comment.comment}</p><hr>`;
+      container.appendChild(div);
+    });
+  }
+
+  // 📝 Enviar novo comentário
+  async function submitComment() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const submissionId = urlParams.get('id');
+    const commentText = document.getElementById('commentInput').value;
+
+    if (!commentText.trim()) {
+      alert('Digite um comentário antes de enviar.');
+      return;
+    }
+
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      alert('Você precisa estar logado para comentar.');
+      return;
+    }
+
+    const { error } = await supabase
+      .from('comments')
+      .insert([{
+        submission_id: parseInt(submissionId),
+        user_email: currentUser.email,
+        comment: commentText
+      }]);
+
+    if (error) {
+      console.error('Erro ao enviar comentário:', error);
+      alert('Erro ao enviar comentário.');
+      return;
+    }
+
+    document.getElementById('commentInput').value = '';
+    loadComments(submissionId);
+  }
+
+  // 🚀 Executar ao carregar a página
+  const urlParams = new URLSearchParams(window.location.search);
+  const submissionId = urlParams.get('id');
+  if (submissionId) {
+    loadComments(submissionId);
+  }
+
+  // 🔓 Expor função para botão
+  window.submitComment = submitComment;
+</script>
+
+
+<script type="module">
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+
+  const SUPABASE_URL = 'https://qnxvprptwczutzojjyve.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFueHZwcnB0d2N6dXR6b2pqeXZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM3MzIxMjAsImV4cCI6MjA2OTMwODEyMH0.oBi3ZBvEIBUzsaAPvYRJIhAZlJuetYVMcxFTRs_gBio';
+
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  function getIdFromUrl() {
+    const params = new URLSearchParams(window.location.search)
+    return params.get('id')
+  }
+
+  async function carregarDetalhes() {
+    const id = getIdFromUrl()
+    if (!id) return
+
+    const { data, error } = await supabase
+      .from('submissions')
+      .select('*')
+      .eq('id', id)
+      .single()
+
+    if (error || !data) {
+      document.body.innerHTML = `<p>Erro ao carregar os dados: ${error?.message || 'Prática não encontrada'}</p>`
+      return
+    }
+
+    // Atualiza os elementos da página com os dados
+document.getElementById('title').textContent = data.title
+document.getElementById('description').textContent = data.description
+document.getElementById('steps').textContent = data.steps
+document.getElementById('region_plant').textContent = data.region_plant
+document.getElementById('file_url').innerHTML = `<a href="${data.file_url}" target="_blank">Download</a>`;
+
+  }
+
+  carregarDetalhes()
+</script>
+
+<script type="module">
+	import { carregarDadosUsuario } from "./user-info.js";
+	carregarDadosUsuario();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" integrity="sha384-7qAoOXltbVP82dhxHAUje59V5r2YsVfBafyUDxEdApLPmcdhBPg1DKg1ERo0BZlK" crossorigin="anonymous"></script>
+</body>
+</html>

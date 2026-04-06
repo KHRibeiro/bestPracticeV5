@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<link rel="icon" href="simb.ico" type="image/x-icon">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="style.css">
+  <title>Implementation Tracker</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+
+	/* Layout principal em duas colunas */
+.layout {
+  display: flex;
+  height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 200px;
+  background-color: #9AB6DE;
+  padding-top: 60px;
+  transition: width 0.3s ease;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar.collapsed {
+  width: 60px;
+}
+
+.sidebar a {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  text-decoration: none;
+  font-size: 18px;
+  color: #fff;
+  white-space: nowrap;
+  transition: background-color 0.2s;
+}
+
+.sidebar a:hover {
+  background-color: #575757;
+}
+
+.sidebar a span:first-child {
+  width: 30px;
+  text-align: center;
+}
+
+.sidebar .link-text {
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+.sidebar.collapsed .link-text {
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  overflow: hidden;
+}
+
+/* Conteúdo principal */
+main {
+  flex: 1;
+  padding: 20px;
+  transition: margin-left 0.3s ease;
+  overflow-y: auto;
+}
+
+/* Botão para abrir sidebar */
+.openbtn {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 1100;
+  font-size: 20px;
+  cursor: pointer;
+  background-color: #9AB6DE;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+}
+
+		
+	body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f4f6f8;
+    }
+    header {
+      background: #9AB6DE;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    nav {
+      background: #34495e;
+      padding: 0.5rem;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+    }
+    nav a {
+      margin: 0 1em;
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    main {
+      padding: 2em;
+    }
+    input[type="text"], select {
+      padding: 0.5em;
+      margin: 0.5em 0;
+      width: 200px;
+    }
+  </style>
+  <link rel="stylesheet" href="theme.css">
+</head>
+<body>
+ 
+<header>
+  <!-- <img alt="Best Practice Platform Logo" src="lamp_light.png" style="height:150px; background-color:transparent;"/> -->
+<!-- Botão de toggle -->	  
+<button onclick="toggleSidebar()" class="openbtn">☰</button>
+<div style="text-align:right; padding:0.5em; font-size:0.9em; color:white">
+
+  👤 <span id="usuario"></span> |
+  🌎 <span id="region"></span> |
+  🔐 <span id="userlvl"></span>
+
+</div>
+</header>
+
+<!-- Container do layout -->
+<div class="layout">
+  <!-- Sidebar -->
+  <div id="mySidebar" class="sidebar collapsed">
+    <a href="index.html" title="Dashboard">
+  <span><i class="bi bi-speedometer2 text-white"></i></span>
+  <span class="link-text">Dashboard</span>
+</a>
+
+<a href="library.html" title="Library">
+  <span><i class="bi bi-journals text-white"></i></span>
+  <span class="link-text">Library</span>
+</a>
+
+<a href="submission.html" title="Submit">
+  <span><i class="bi bi-upload text-white"></i></span>
+  <span class="link-text">Submit</span>
+</a>
+
+<a href="tracker.html" title="Tracker">
+  <span><i class="bi bi-graph-up-arrow text-white"></i></span>
+  <span class="link-text">Implement</span>
+</a>
+
+<a href="audit.html" title="Audit">
+  <span><i class="bi bi-search text-white"></i></span>
+  <span class="link-text">Audit</span>
+</a>
+
+<a href="admin.html" title="Admin">
+  <span><i class="bi bi-person-gear text-white"></i></span>
+  <span class="link-text">Admin</span>
+</a>
+
+<a href="login.html" title="Login">
+  <span><i class="bi bi-box-arrow-in-right text-white"></i></span>
+  <span class="link-text">Login</span>
+</a>
+
+   <!-- Novo botão de mensagens -->
+  <a href="mail.html" title="Mensagens">
+    <span><i class="bi bi-envelope-fill text-white"></i></span>
+    <span class="link-text">BP Mail</span>
+  </a>
+	  
+    <!-- Botão logout fixado no rodapé -->
+<div class="logout-container">
+    <a href="#" id="logoutBtn" title="Logout">
+    <span><i class="bi bi-box-arrow-right text-white"></i></span>
+    <span class="link-text">Logout</span>
+    </a>
+</div>
+  </div>
+	
+  <main id="mainContent">
+    <section>
+      <h2>Implementation Portfolio</h2>
+      <ul id="deployment-list">
+        <table class="table table-hover" id="tabela-atividades">
+	<thead>
+	<tr>
+	<th>Title</th>
+	<th>Category</th>
+	<th>Region/Site</th>
+	<th>Local Responsible</th>
+	<th>Status</th>
+	<th>Files</th>
+	<th>Remove</th>
+	</tr>
+	</thead>
+	<tbody></tbody>
+	</table><!-- List of user's deployments -->
+      </ul>
+    </section>
+
+<div id="detalhes-pratica" class="mt-4" style="display:none;">
+  <h3>Best Practice Details</h3>
+  <p><strong>Title:</strong> <span id="detalhe-title"></span></p>
+  <p><strong>Category:</strong> <span id="detalhe-category"></span></p>
+  <p><strong>Description:</strong> <span id="detalhe-desc"></span></p>
+  <p><strong>Steps:</strong> <span id="detalhe-steps"></span></p>
+  <p><strong>Region/Site:</strong> <span id="detalhe-region_plant"></span></p>
+  <p><strong>Best Practice Responsible:</strong> <span id="detalhe-responsible"></span></p>
+  <p><strong>Status:</strong> <span id="detalhe-status"></span></p>
+  <p><strong>Comments:</strong> <span id="detalhe-comentario"></span></p>
+	
+  <div id="acoes">
+    <!-- Será preenchido dinamicamente -->
+  </div>
+</div>
+
+    
+  </main>
+</div>
+	
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<script>
+function toggleSidebar() {
+  const sidebar = document.getElementById("mySidebar");
+  sidebar.classList.toggle("collapsed");
+}
+</script>
+
+	
+<script type="module">
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+  const supabase = createClient('https://qnxvprptwczutzojjyve.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFueHZwcnB0d2N6dXR6b2pqeXZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM3MzIxMjAsImV4cCI6MjA2OTMwODEyMH0.oBi3ZBvEIBUzsaAPvYRJIhAZlJuetYVMcxFTRs_gBio');
+
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (user) {
+    document.getElementById("usuarioDisplay").innerText = `User: ${user.email}`;
+    document.getElementById("usuario").value = user.email;
+  } else {
+    window.location.href = "login.html"; // redireciona se não estiver logado
+  }
+	
+</script>
+
+<script type="module">
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const SUPABASE_URL = 'https://qnxvprptwczutzojjyve.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFueHZwcnB0d2N6dXR6b2pqeXZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM3MzIxMjAsImV4cCI6MjA2OTMwODEyMH0.oBi3ZBvEIBUzsaAPvYRJIhAZlJuetYVMcxFTRs_gBio';
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+ import { getLoggedUser, getUserData } from "./user-info.js";
+
+async function carregarAtividadesSelecionadas() {
+
+  // 1️⃣ usuário logado
+  const user = await getLoggedUser();
+  if (!user) return;
+
+  // 2️⃣ dados do usuário
+  const userData = await getUserData(user.email);
+  if (!userData) return;
+
+  const siteRegion = userData.site_region;
+
+  // 3️⃣ filtro direto no Supabase 🎯
+  const { data, error } = await supabase
+    .from('atividades_selecionadas')
+    .select('*')
+    .eq('imp_plant', siteRegion);
+
+  if (error) {
+    console.error('Error loading best practices:', error);
+    return;
+  }
+
+  const tabela = document.querySelector('#tabela-atividades tbody');
+  if (!tabela) return;
+
+  tabela.innerHTML = '';
+
+  data.forEach(item => {
+    const linha = tabela.insertRow();
+    linha.setAttribute('data-id', item.id);
+    linha.style.cursor = 'pointer';
+
+    linha.innerHTML = `
+      <td>${item.title}</td>
+      <td>${item.category}</td>
+      <td>${item.region_plant}</td>
+      <td>${item.ImpResp}</td>
+      <td>${item.status}</td>
+      <td>
+        ${item.file_url ? `<a href="${item.file_url}" target="_blank">Download</a>` : ''}
+      </td>
+      <td>
+        <button class="btn btn-primary" title="Delete"
+          onclick="removerAtividade(this); event.stopPropagation();">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </td>
+    `;
+
+    linha.addEventListener('click', () => mostrarDetalhes(item));
+  });
+}
+	
+  window.removerAtividade = async function(botao) {
+    const linha = botao.closest('tr');
+    const id = linha.getAttribute('data-id');
+
+    const { error } = await supabase
+      .from('atividades_selecionadas')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      console.error('Erro ao remover:', error);
+      alert('Error removing best practices');
+    } else {
+      linha.remove();
+      alert('Best Practice removed!');
+    }
+  };
+
+	window.mostrarDetalhes = function(item) {
+  document.getElementById('detalhe-title').innerText = item.title;
+  document.getElementById('detalhe-category').innerText = item.category;
+  document.getElementById('detalhe-desc').innerText = item.description;
+  document.getElementById('detalhe-steps').innerText = item.steps;		
+  document.getElementById('detalhe-region_plant').innerText = item.region_plant;
+  document.getElementById('detalhe-responsible').innerText = item.responsible;
+  document.getElementById('detalhe-status').innerText = item.status;
+  document.getElementById('detalhe-comentario').innerText = item.comments;
+
+  const acoes = document.getElementById('acoes');
+  acoes.innerHTML = ''; // limpa antes de preencher
+
+  if (item.status.toLowerCase() !== 'in process') {
+    acoes.innerHTML = `<button class="btn btn-success" onclick="iniciarImplementacao(${item.id})">Implement</button>`;
+  } else {
+    acoes.innerHTML = `
+  <div class="mb-3">
+    <label>Comments:</label>
+    <textarea id="comentarios-${item.id}" class="form-control" rows="3" placeholder="Write here..."></textarea>
+  </div>
+  <div class="mb-3">
+    <label>Files:</label>
+    <input id="anexo-${item.id}" type="file" class="form-control">
+  </div>
+  <button class="btn btn-primary" onclick="submeterImplementacao(${item.id})">Submit</button>
+  <button class="btn btn-secondary" onclick="cancelaImplementacao(${item.id})">Cancel</button>
+`;
+
+  }
+
+  document.getElementById('detalhes-pratica').style.display = 'block';
+};
+
+	window.iniciarImplementacao = async function(id) {
+  const { error } = await supabase
+    .from('atividades_selecionadas')
+    .update({ status: 'In Process' })
+    .eq('id', id);
+
+  if (error) {
+    alert('Erro ao iniciar implementação.');
+  } else {
+    alert('Implementation Started!');
+    carregarAtividadesSelecionadas(); // recarrega a tabela
+    document.getElementById('detalhes-pratica').style.display = 'none';
+  }
+};
+
+	window.cancelaImplementacao = async function(id) {
+  const { error } = await supabase
+    .from('atividades_selecionadas')
+    .update({ status: 'Aborted' })
+    .eq('id', id);
+
+  if (error) {
+    alert('Erro ao cancelar implementação.');
+  } else {
+    alert('Cancelada!');
+  }
+};
+
+window.submeterImplementacao = async function(id) {
+  const comentarios = document.getElementById(`comentarios-${id}`).value;
+  const arquivo = document.getElementById(`anexo-${id}`).files[0];
+  const type = 'Implementation Submission';
+
+	
+  let fileUrl = null;
+
+  if (arquivo) {
+    // Nome único para o arquivo
+    const fileName = `${Date.now()}_${arquivo.name}`;
+    
+    const { error: uploadError } = await supabase
+      .storage
+      .from('implementfiles')
+      .upload(fileName, arquivo);
+
+    if (uploadError) {
+      alert("Erro ao enviar arquivo: " + uploadError.message);
+      return;
+    }
+
+    // URL pública
+    const { data } = supabase.storage
+      .from('implementfiles')
+      .getPublicUrl(fileName);
+
+    fileUrl = data.publicUrl;
+  }
+
+  // Atualiza tabela atividades_selecionadas
+  const { error } = await supabase
+    .from('atividades_selecionadas')
+    .update({ comments: comentarios, file_url: fileUrl, status:'Submitted', type: type })
+    .eq('id', id);
+
+  if (error) {
+    alert("Erro ao salvar implementação: " + error.message);
+  } else {
+    alert("Implementation Submitted!");
+    carregarAtividadesSelecionadas(); // recarrega tabela
+    document.getElementById('detalhes-pratica').style.display = 'none';
+  }
+};
+
+
+
+  window.onload = carregarAtividadesSelecionadas;
+</script>
+
+<script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+    const supabase = createClient('https://qnxvprptwczutzojjyve.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFueHZwcnB0d2N6dXR6b2pqeXZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM3MzIxMjAsImV4cCI6MjA2OTMwODEyMH0.oBi3ZBvEIBUzsaAPvYRJIhAZlJuetYVMcxFTRs_gBio');
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const logoutBtn = document.getElementById('logoutBtn');
+      logoutBtn.addEventListener('click', async () => {
+        const { error } = await supabase.auth.signOut();
+        if (error) {
+          console.error('Erro ao fazer logout:', error.message);
+        } else {
+          alert('Logout realizado com sucesso!');
+          window.location.href = 'login.html'; // ou outra página desejada
+        }
+      });
+    });
+  </script>
+<script type="module">
+	import { carregarDadosUsuario } from "./user-info.js";
+	carregarDadosUsuario();
+</script>	
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>	
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

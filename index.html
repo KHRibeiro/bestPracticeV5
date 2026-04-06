@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <link rel="icon" href="simb.ico" type="image/x-icon">
+<link rel="icon" href="simb.ico" type="image/x-icon">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="style.css" rel="stylesheet"/>
+<title>Dashboard - Best Practices Platform</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+
+
+/* Layout principal em duas colunas */
+.layout {
+  display: flex;
+  height: 100vh;
+}
+
+/* Sidebar   AQUI*/
+.sidebar {
+  width: 200px;
+  background-color: #9AB6DE;
+  padding-top: 60px;
+  transition: width 0.3s ease;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  z-index: 1001; /* maior que o header */
+}
+
+.sidebar.collapsed {
+  width: 60px;
+}
+
+.sidebar a {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  text-decoration: none;
+  font-size: 18px;
+  color: #fff;
+  white-space: nowrap;
+  transition: background-color 0.2s;
+}
+
+.sidebar a:hover {
+  background-color: #575757;
+}
+
+.sidebar a span:first-child {
+  width: 30px;
+  text-align: center;
+}
+
+.sidebar .link-text {
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+.sidebar.collapsed .link-text {
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  overflow: hidden;
+}
+
+/* Conteúdo principal */
+main {
+  flex: 1;
+  padding: 25px;
+  transition: margin-left 0.3s ease;
+  overflow-y: auto;
+}
+
+/* Botão para abrir sidebar AQUI*/
+.openbtn {
+  position: fixed;
+  top: 10px;
+  left: 15px;
+  z-index: 1100;
+  font-size: 20px;
+  cursor: pointer;
+  background-color: #9AB6DE;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+}
+
+
+/* Container do botão de logout  AQUI*/
+.logout-container {
+  margin-bottom: 20px;
+}
+
+.logout-container a {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  text-decoration: none;
+  font-size: 18px;
+  color: #fff;
+  background-color: #9AB6DE;
+  transition: background-color 0.2s;
+}
+
+.logout-container a:hover {
+  background-color: #c0392b;
+}
+    
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f4f6f8;
+    }
+
+  header {
+  background: #9AB6DE;
+  color: white;
+  padding: 1rem;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+  
+    nav {
+      background: #34495e;
+      padding: 0.5rem;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1rem;
+      padding: 1rem;
+    }
+    .card {
+      background: white;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .kpi {
+      font-size: 2em;
+      color: #27ae60;
+    }
+    .quick-links a {
+      display: block;
+      margin: 0.5rem 0;
+      color: #2980b9;
+      text-decoration: none;
+    }
+
+  .arrow-contmaster {
+        font-family: Arial, sans-serif;
+        background: #f5f5f5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+    
+    .arrow-container {
+      display: flex;
+      gap: 20px;
+    }
+
+    .arrow-btn {
+      position: relative;
+      padding: 20px 40px;
+      background: linear-gradient(to bottom, #eaf0fa, #a9c2e7);
+      color: #0a1a33;
+      font-size: 18px;
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-block;
+      clip-path: polygon(
+        0 0, calc(100% - 30px) 0, 100% 50%, calc(100% - 30px) 100%, 0 100%, 30px 50%
+      );
+      transition: 0.3s;
+      text-align: center;
+      line-height: 1.4em;
+    }
+
+    .arrow-btn span {
+      display: block;
+      font-size: 14px;
+      font-weight: normal;
+    }
+
+    .arrow-btn:hover {
+      background: linear-gradient(to bottom, #d0e0ff, #6f9de7);
+      color: #fff;
+    }
+
+    
+  </style>
+  <link rel="stylesheet" href="theme.css">
+</head>
+<body>
+<div class="container-fluid">
+  
+<header><img alt="Best Practice Platform Logo" src="Logo_title.png" style="height:150px; background-color:transparent;"/>
+
+<div style="text-align:right; padding:0.5em; font-size:0.9em; color:white">
+
+  👤 <span id="usuario"></span> |
+  🌎 <span id="region"></span> |
+  🔐 <span id="userlvl"></span>
+
+</div>
+  
+</header>
+<!--<nav>
+<a href="index.html">Dashboard</a>
+<a href="library.html">Library</a>
+<a href="submission.html">Submit</a>
+<a href="tracker.html">Tracker</a>
+<a href="audit.html">Audit</a>
+<a href="admin.html">Admin</a>
+<a href="login.html" style="float:right;">Login</a>
+</nav>
+-->
+
+<!-- Botão de toggle -->
+<button onclick="toggleSidebar()" class="openbtn">☰</button>
+
+<!-- Container do layout -->
+<div class="layout">
+  
+  <!-- Sidebar -->
+  <div id="mySidebar" class="sidebar collapsed">
+    <a href="index.html" title="Dashboard">
+  <span><i class="bi bi-speedometer2 text-white"></i></span>
+  <span class="link-text">Dashboard</span>
+</a>
+
+<a href="library.html" title="Library">
+  <span><i class="bi bi-journals text-white"></i></span>
+  <span class="link-text">Library</span>
+</a>
+
+<a href="submission.html" title="Submit">
+  <span><i class="bi bi-upload text-white"></i></span>
+  <span class="link-text">Submit</span>
+</a>
+
+<a href="tracker.html" title="Tracker">
+  <span><i class="bi bi-graph-up-arrow text-white"></i></span>
+  <span class="link-text">Implement</span>
+</a>
+
+<a href="audit.html" title="Audit">
+  <span><i class="bi bi-search text-white"></i></span>
+  <span class="link-text">Audit</span>
+</a>
+
+<a href="admin.html" title="Admin">
+  <span><i class="bi bi-person-gear text-white"></i></span>
+  <span class="link-text">Admin</span>
+</a>
+
+<a href="login.html" title="Login">
+  <span><i class="bi bi-box-arrow-in-right text-white"></i></span>
+  <span class="link-text">Login</span>
+</a>
+
+    <!-- Novo botão de mensagens -->
+  <a href="mail.html" title="Mensagens">
+    <span><i class="bi bi-envelope-fill text-white"></i></span>
+    <span class="link-text">BP Mail</span>
+  </a>
+
+    <!-- Botão logout fixado no rodapé -->
+<div class="logout-container">
+    <a href="#" id="logoutBtn" title="Logout">
+    <span><i class="bi bi-box-arrow-right text-white"></i></span>
+    <span class="link-text">Logout</span>
+    </a>
+</div>
+
+  </div>
+
+<main id="mainContent">
+  
+<div class="arrow-contmaster">
+<div class="arrow-container">
+    <a href="library.html" class="arrow-btn">🔍 Search<span>Explore the Library.</span></a>
+    <a href="submission.html" class="arrow-btn">➕ Share<span>Begin drafting a new Best Practice.</span></a>
+    <a href="tracker.html" class="arrow-btn">🛠️ Implement<span>Implement approved ideas into your site.</span></a>
+</div>
+</div>
+
+<div class="container">
+
+<div class="card">
+  <h2>🏆 Top 5 Locations</h2>
+  <ul id="rankingList">
+    <li>Loading...</li>
+  </ul>
+</div>
+  
+<div class="card">
+  <h2>Recent Best Practices</h2>
+  <ul id="recentPractices">
+    <li>Loading...</li>
+  </ul>
+</div>
+
+  
+<!--<div class="card">
+<h2>KPIs</h2>
+<p><strong>Adoption Rate:</strong> <span class="kpi">78%</span></p>
+<p><strong>Pending Approvals:</strong> <span class="kpi">12</span></p>
+</div> -->
+  
+<div class="card">
+  <h2>📩 My Messages</h2>
+  <p id="msgInfo">Loading...</p>
+  <a href="mail.html" class="btn btn-primary btn-sm mt-2">
+    <i class="bi bi-envelope-fill"></i> Check my messages
+  </a>
+</div>
+
+  
+<!-- <div class="card">
+  <h2>📄 Structure </h2>
+  <a href="Best_Practices_Pl.pdf" class="btn btn-primary btn-sm mt-2">STRUCTURE</a>
+  <a href="2025_GKN_PM_PlatformPresentarion.pdf" class="btn btn-primary btn-sm mt-2">PLATFORM PRESENTATION</a>
+</div>
+
+<div class="card">
+  <h2>📄 Database </h2>
+  <a href="https://supabase.com/dashboard/project/qnxvprptwczutzojjyve/editor/17269?schema=public" class="btn btn-primary btn-sm mt-2">Access</a>
+</div>
+
+<div class="card">
+  <h2>📄 Github </h2>
+  <a href="https://github.com/KHRibeiro/best_practice_platform/tree/main" class="btn btn-primary btn-sm mt-2">Access</a>
+</div> -->
+  
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="practiceModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="practiceTitle">Best Practice</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Region:</strong> <span id="practiceRegion"></span></p>
+        <p id="practiceDescription"></p>
+      </div>
+      <div class="modal-footer">
+        <a href="library.html" class="btn btn-primary">Go to Library</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  
+</body>
+</main>
+</div>
+  
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" integrity="sha384-7qAoOXltbVP82dhxHAUje59V5r2YsVfBafyUDxEdApLPmcdhBPg1DKg1ERo0BZlK" crossorigin="anonymous"></script>
+    
+<script type="module">
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+  const supabase = createClient('https://qnxvprptwczutzojjyve.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFueHZwcnB0d2N6dXR6b2pqeXZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM3MzIxMjAsImV4cCI6MjA2OTMwODEyMH0.oBi3ZBvEIBUzsaAPvYRJIhAZlJuetYVMcxFTRs_gBio');
+
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (user) {
+    document.getElementById("usuario").innerText = `Welcome, ${user.email}`;
+  } else {
+    window.location.href = "login.html"; // redireciona se não estiver logado
+  }
+    
+</script>
+
+
+
+<script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+    const supabase = createClient('https://qnxvprptwczutzojjyve.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFueHZwcnB0d2N6dXR6b2pqeXZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM3MzIxMjAsImV4cCI6MjA2OTMwODEyMH0.oBi3ZBvEIBUzsaAPvYRJIhAZlJuetYVMcxFTRs_gBio');
+
+
+  
+    window.addEventListener('DOMContentLoaded', () => {
+      const logoutBtn = document.getElementById('logoutBtn');
+      logoutBtn.addEventListener('click', async () => {
+        const { error } = await supabase.auth.signOut();
+        if (error) {
+          console.error('Erro ao fazer logout:', error.message);
+        } else {
+          alert('Logout realizado com sucesso!');
+          window.location.href = 'login.html'; // ou outra página desejada
+        }
+      });
+    });
+  </script>
+
+<script>
+function toggleSidebar() {
+  const sidebar = document.getElementById("mySidebar");
+  sidebar.classList.toggle("collapsed");
+}
+</script>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const supabase = createClient('https://qnxvprptwczutzojjyve.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFueHZwcnB0d2N6dXR6b2pqeXZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM3MzIxMjAsImV4cCI6MjA2OTMwODEyMH0.oBi3ZBvEIBUzsaAPvYRJIhAZlJuetYVMcxFTRs_gBio');
+
+import { carregarDadosUsuario } from "./user-info.js";
+carregarDadosUsuario();
+
+ async function loadRecentPractices() {
+  const { data, error } = await supabase
+    .from("submissions")
+    .select("id, title, region_plant, description, creation_date")
+    .order("creation_date", { ascending: false })
+    .limit(5);
+
+  const list = document.getElementById("recentPractices");
+  list.innerHTML = "";
+
+  if (error) {
+    console.error("Erro ao carregar práticas:", error.message);
+    list.innerHTML = "<li>Erro ao carregar práticas.</li>";
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    list.innerHTML = "<li>Nenhuma prática encontrada.</li>";
+    return;
+  }
+
+  data.forEach((item) => {
+    const li = document.createElement("li");
+    const shortTitle = item.title.length > 40 ? item.title.substring(0, 40) + "..." : item.title;
+
+    li.innerHTML = `<a href="#" class="practice-link" data-id="${item.id}"><strong>${shortTitle}</strong> <em>(${item.region_plant})</em></a>`;
+    list.appendChild(li);
+  });
+
+  // adiciona eventos de clique para abrir modal
+  document.querySelectorAll(".practice-link").forEach(link => {
+    link.addEventListener("click", async (e) => {
+      e.preventDefault();
+      const id = link.getAttribute("data-id");
+
+      // busca detalhes no Supabase
+      const { data: practice, error: detailError } = await supabase
+        .from("submissions")
+        .select("title, region_plant, description")
+        .eq("id", id)
+        .single();
+
+      if (detailError) {
+        console.error("Erro ao carregar detalhes:", detailError.message);
+        return;
+      }
+
+      // preenche modal
+      document.getElementById("practiceTitle").innerText = practice.title;
+      document.getElementById("practiceRegion").innerText = practice.region_plant;
+      document.getElementById("practiceDescription").innerText = practice.description ?? "No description provided.";
+
+      // abre modal
+      const modal = new bootstrap.Modal(document.getElementById("practiceModal"));
+      modal.show();
+    });
+  });
+}
+
+loadRecentPractices();
+
+  async function loadRanking() {
+  const { data, error } = await supabase
+    .from("location")
+    .select("region_plantloc, points")   // ajuste se o nome da coluna for diferente
+    .order("points", { ascending: false })
+    .limit(5);
+
+  const rankingList = document.getElementById("rankingList");
+  rankingList.innerHTML = "";
+
+  if (error) {
+    console.error("Erro ao buscar ranking:", error.message);
+    rankingList.innerHTML = "<li>Erro ao carregar ranking</li>";
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    rankingList.innerHTML = "<li>Sem dados disponíveis</li>";
+    return;
+  }
+
+  data.forEach((loc, index) => {
+    const li = document.createElement("li");
+    const points = loc.points ?? 0; // garante 0 caso seja null
+
+    // Escolher medalha ou posição
+    let prefix = `<strong>#${index + 1}</strong>`;
+    if (index === 0) prefix = "🥇";
+    else if (index === 1) prefix = "🥈";
+    else if (index === 2) prefix = "🥉";
+
+    li.innerHTML = `${prefix} ${loc.region_plantloc} - ${points} pts`;
+    rankingList.appendChild(li);
+  });
+}
+
+loadRanking();
+  
+async function loadMessageInfo() {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return;
+
+  // busca mensagens não lidas
+  let { data: inbox, error } = await supabase
+    .from("messages")
+    .select("id, is_read")
+    .eq("receiver", user.id)
+    .eq("is_read", false);
+
+  if (error) {
+    console.error("Erro ao buscar mensagens:", error);
+    document.getElementById("msgInfo").innerText = "Erro ao carregar mensagens.";
+    return;
+  }
+
+  const count = inbox.length;
+  const msgInfo = document.getElementById("msgInfo");
+  if (count > 0) {
+    msgInfo.innerHTML = `You have <strong>${count}</strong> new message(s).`;
+  } else {
+    msgInfo.innerText = "There are no new messages.";
+  }
+}
+
+loadMessageInfo();
+  
+</script>
+
+<!-- Bootstrap JS (necessário) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Loader do modal -->
+<script type="module" src="modal-loader.js"></script>
+  
+</html>

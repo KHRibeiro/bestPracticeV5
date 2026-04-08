@@ -194,6 +194,13 @@ async function initUser() {
   window.userDataGlobal = await getUserData(user.email);
 }
 
+function canGeneratePostForItem(item) {
+  const loggedEmail = (window.userGlobal?.email || '').trim().toLowerCase();
+  const responsibleEmail = (item?.responsible || '').trim().toLowerCase();
+  const status = (item?.status || '').trim().toLowerCase();
+  return !!loggedEmail && !!responsibleEmail && loggedEmail === responsibleEmail && status === 'approved';
+}
+
 function escapeHtml(str) {
   if (str === null || str === undefined) return '';
   return String(str).replace(/[&<>"'`=\/]/g, s => ({

@@ -8,57 +8,85 @@
   <title>Implementation Tracker</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-  <style>
-    .layout { display: flex; height: 100vh; }
-    .sidebar {
-      width: 200px;
-      background-color: #9AB6DE;
-      padding-top: 60px;
-      transition: width 0.3s ease;
-      overflow-x: hidden;
-      display: flex;
-      flex-direction: column;
-    }
-    .sidebar.collapsed { width: 60px; }
-    .sidebar a {
-      display: flex;
-      align-items: center;
-      padding: 12px 16px;
-      text-decoration: none;
-      font-size: 18px;
-      color: #fff;
-      white-space: nowrap;
-      transition: background-color 0.2s;
-    }
-    .sidebar a:hover { background-color: #575757; }
-    .sidebar a span:first-child { width: 30px; text-align: center; }
-    .sidebar .link-text { opacity: 1; transition: opacity 0.2s ease; }
-    .sidebar.collapsed .link-text {
-      opacity: 0;
-      pointer-events: none;
-      width: 0;
-      overflow: hidden;
-    }
-    main {
-      flex: 1;
-      padding: 20px;
-      transition: margin-left 0.3s ease;
-      overflow-y: auto;
-    }
-    .openbtn {
-      position: fixed;
-      top: 10px;
-      left: 10px;
-      z-index: 1100;
-      font-size: 20px;
-      cursor: pointer;
-      background-color: #9AB6DE;
-      color: white;
-      padding: 10px 15px;
-      border: none;
-    }
-    body {
+    <style>
+
+	/* Layout principal em duas colunas */
+.layout {
+  display: flex;
+  height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 200px;
+  background-color: #9AB6DE;
+  padding-top: 60px;
+  transition: width 0.3s ease;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar.collapsed {
+  width: 60px;
+}
+
+.sidebar a {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  text-decoration: none;
+  font-size: 18px;
+  color: #fff;
+  white-space: nowrap;
+  transition: background-color 0.2s;
+}
+
+.sidebar a:hover {
+  background-color: #575757;
+}
+
+.sidebar a span:first-child {
+  width: 30px;
+  text-align: center;
+}
+
+.sidebar .link-text {
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+.sidebar.collapsed .link-text {
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  overflow: hidden;
+}
+
+/* Conteúdo principal */
+main {
+  flex: 1;
+  padding: 20px;
+  transition: margin-left 0.3s ease;
+  overflow-y: auto;
+}
+
+/* Botão para abrir sidebar */
+.openbtn {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 1100;
+  font-size: 20px;
+  cursor: pointer;
+  background-color: #9AB6DE;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+}
+
+		
+	body {
       font-family: Arial, sans-serif;
       margin: 0;
       background: #f4f6f8;
@@ -69,119 +97,113 @@
       padding: 1rem;
       text-align: center;
     }
-    main { padding: 2em; }
-    .tracker-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.6fr) minmax(340px, 0.9fr);
-      gap: 24px;
-      align-items: start;
-    }
-    .tracker-list-card,
-    .tracker-panel-card {
-      background: #fff;
-      border: 1px solid #e4e8ee;
-      border-radius: 16px;
-      box-shadow: 0 10px 24px rgba(16, 16, 16, 0.06);
-    }
-    .tracker-list-card { padding: 20px; }
-    .tracker-panel-card {
-      padding: 20px;
-      position: sticky;
-      top: 24px;
-    }
-    .tracker-toolbar .btn { min-width: 210px; }
-    .table-wrap {
-      max-height: calc(100vh - 320px);
-      overflow: auto;
-      border: 1px solid #edf1f5;
-      border-radius: 12px;
-    }
-    #results-table { margin-bottom: 0; }
-    #results-table thead th {
-      position: sticky;
-      top: 0;
-      z-index: 1;
-      background: #fff;
-    }
-    #results-table tbody tr { cursor: pointer; }
-    #results-table tbody tr.table-active > * {
-      box-shadow: inset 0 0 0 9999px rgba(154, 182, 222, 0.18);
-    }
-    .empty-state {
-      text-align: center;
-      padding: 28px 16px;
-      color: #6c757d;
-    }
-    .selection-placeholder {
-      border: 1px dashed #d6dee8;
-      border-radius: 14px;
-      padding: 28px 18px;
-      text-align: center;
-      color: #6c757d;
-      background: linear-gradient(180deg, #fbfdff 0%, #f6f9fc 100%);
-    }
-    .selection-placeholder i {
-      font-size: 2rem;
-      display: block;
-      margin-bottom: 10px;
-      color: #9AB6DE;
-    }
-    .review-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.78rem;
-      border-radius: 999px;
-      padding: 6px 10px;
-      border: 1px solid #d9e3f0;
-      background: #f8fbff;
-      color: #335;
-    }
-    .panel-actions {
+    nav {
+      background: #34495e;
+      padding: 0.5rem;
       display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
+      justify-content: center;
+      gap: 1rem;
     }
-    .panel-section + .panel-section {
-      margin-top: 14px;
-      padding-top: 14px;
-      border-top: 1px solid #edf1f5;
+    nav a {
+      margin: 0 1em;
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
     }
-    .panel-label {
-      display: block;
-      font-size: 0.78rem;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      color: #6c757d;
-      margin-bottom: 6px;
+    nav a:hover {
+      text-decoration: underline;
     }
-    .panel-value {
-      color: #222;
-      white-space: pre-wrap;
-      word-break: break-word;
+    main {
+      padding: 2em;
     }
-    .panel-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
+    input[type="text"], select {
+      padding: 0.5em;
+      margin: 0.5em 0;
+      width: 200px;
     }
-    .panel-grid .full { grid-column: 1 / -1; }
-    .inline-implementation-form {
-      display: grid;
-      gap: 14px;
-      width: 100%;
-    }
-    .inline-implementation-form textarea { min-height: 120px; resize: vertical; }
-    @media (max-width: 1200px) {
-      .tracker-grid { grid-template-columns: 1fr; }
-      .tracker-panel-card { position: static; }
-      .table-wrap { max-height: none; }
-    }
-    @media (max-width: 768px) {
-      .panel-grid { grid-template-columns: 1fr; }
-      .tracker-toolbar .btn { min-width: 0; }
-    }
-  </style>
+  
+
+.tracker-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(340px, 0.95fr);
+  gap: 24px;
+  align-items: start;
+}
+.tracker-list-card,
+.tracker-panel-card {
+  background: #fff;
+  border: 1px solid #e4e8ee;
+  border-radius: 16px;
+  box-shadow: 0 10px 24px rgba(16,16,16,0.06);
+}
+.tracker-list-card { padding: 20px; }
+.tracker-panel-card { padding: 20px; position: sticky; top: 24px; }
+.table-wrap {
+  max-height: calc(100vh - 320px);
+  overflow: auto;
+  border: 1px solid #edf1f5;
+  border-radius: 12px;
+}
+#tabela-atividades thead th {
+  position: sticky;
+  top: 0;
+  background: #fff;
+  z-index: 1;
+}
+#tabela-atividades tbody tr.table-active > * {
+  box-shadow: inset 0 0 0 9999px rgba(154, 182, 222, 0.18);
+}
+.selection-placeholder {
+  border: 1px dashed #d6dee8;
+  border-radius: 14px;
+  padding: 28px 18px;
+  text-align: center;
+  color: #6c757d;
+  background: linear-gradient(180deg, #fbfdff 0%, #f6f9fc 100%);
+}
+.selection-placeholder i {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 10px;
+  color: #9AB6DE;
+}
+.review-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  border-radius: 999px;
+  padding: 6px 10px;
+  border: 1px solid #d9e3f0;
+  background: #f8fbff;
+  color: #335;
+}
+.panel-section { margin-bottom: 14px; }
+.panel-label {
+  display: block;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #6c757d;
+  margin-bottom: 6px;
+}
+.panel-value { white-space: pre-wrap; word-break: break-word; }
+.panel-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.panel-grid .full { grid-column: 1 / -1; }
+#acoes .alert { margin-bottom: 0; }
+#acoes textarea { min-height: 120px; resize: vertical; }
+#acoes .btn { margin-right: 8px; margin-bottom: 8px; }
+@media (max-width: 1200px) {
+  .tracker-grid { grid-template-columns: 1fr; }
+  .tracker-panel-card { position: static; }
+  .table-wrap { max-height: none; }
+}
+@media (max-width: 768px) {
+  .panel-grid { grid-template-columns: 1fr; }
+}
+
+</style>
+  <link rel="stylesheet" href="theme.css">
 </head>
 <body>
  
@@ -252,55 +274,52 @@
 </div>
   </div>
 	
-  
   <main id="mainContent">
+  <section>
+    <h2>Implementation Portfolio</h2>
+
+    <form class="row g-3 needs-validation" novalidate>
+      <div class="col-md-3">
+        <label class="form-label">Keywords:</label>
+        <input id="searchInput" class="form-control" onkeyup="filterTable()" placeholder="Keywords..." type="text"/>
+      </div>
+      <div class="col-md-3">
+        <label for="filter-category" class="form-label">Category:</label>
+        <select id="filter-category" class="form-select">
+          <option value="">All</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label for="filter-status" class="form-label">Status:</label>
+        <select id="filter-status" class="form-select">
+          <option value="">All</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label for="filter-location" class="form-label">Region/Site:</label>
+        <select id="filter-location" class="form-select">
+          <option value="">All</option>
+        </select>
+      </div>
+    </form>
+
+    <div class="btn-group mb-3" role="group" aria-label="Tracker source">
+      <button id="btnSelectedIdeas" class="btn btn-outline-primary active">Selected for Implementation</button>
+      <button id="btnMySubmissions" class="btn btn-outline-primary">My Submitted Ideas</button>
+    </div>
+
     <div class="tracker-grid">
-      <section class="tracker-list-card">
-        <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-3">
-          <div>
-            <h2 class="mb-1">Implementation Portfolio</h2>
-            <div class="text-muted">Track selected implementations and your own submitted ideas without losing context from the list.</div>
-          </div>
-          <div class="btn-group tracker-toolbar" role="group" aria-label="Tracker source selector">
-            <button id="btnImplementations" class="btn btn-outline-primary active" type="button">Selected for Implementation</button>
-            <button id="btnSubmissions" class="btn btn-outline-primary" type="button">My Submitted Ideas</button>
-          </div>
-        </div>
-
-        <form class="row g-3 needs-validation mb-3" novalidate>
-          <div class="col-md-3">
-            <label class="form-label">Keywords:</label>
-            <input id="searchInput" class="form-control" placeholder="Keywords..." type="text"/>
-          </div>
-          <div class="col-md-3">
-            <label for="filter-category" class="form-label">Category:</label>
-            <select id="filter-category" class="form-select">
-              <option value="">All</option>
-            </select>
-          </div>
-          <div class="col-md-3">
-            <label for="filter-status" class="form-label">Status:</label>
-            <select id="filter-status" class="form-select">
-              <option value="">All</option>
-            </select>
-          </div>
-          <div class="col-md-3">
-            <label for="filter-location" class="form-label">Region/Site:</label>
-            <select id="filter-location" class="form-select">
-              <option value="">All</option>
-            </select>
-          </div>
-        </form>
-
+      <div class="tracker-list-card">
         <div class="table-wrap">
-          <table class="table table-hover align-middle" id="results-table">
+          <table class="table table-hover mb-0" id="tabela-atividades">
             <thead>
               <tr>
                 <th>Title</th>
-                <th>Site/Region</th>
+                <th>Region/Site</th>
                 <th>Local Responsible</th>
                 <th>Category</th>
                 <th>Status</th>
+                <th>Type</th>
                 <th>Files</th>
                 <th>Action</th>
               </tr>
@@ -308,62 +327,55 @@
             <tbody></tbody>
           </table>
         </div>
-      </section>
+      </div>
 
-      <aside id="detalhes-pratica" class="tracker-panel-card">
-        <div id="detailPlaceholder" class="selection-placeholder">
-          <i class="bi bi-card-checklist"></i>
-          <div class="fw-semibold mb-1">Select an item to review</div>
-          <div>Click a row on the left to inspect the best practice details and continue the implementation workflow.</div>
+      <aside class="tracker-panel-card">
+        <div id="selection-placeholder" class="selection-placeholder">
+          <i class="bi bi-card-text"></i>
+          <div>Select an item to review the details here.</div>
         </div>
 
-        <div id="detailContent" style="display:none;">
+        <div id="detalhes-pratica" style="display:none;">
           <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
             <div>
-              <h3 class="mb-1">Review Details</h3>
-              <div class="review-pill">
-                <i class="bi bi-info-circle"></i>
-                <span id="detalhe-status"></span>
-              </div>
+              <h3 id="detalhe-title" class="mb-1"></h3>
+              <span class="review-pill"><i class="bi bi-flag"></i> <span id="detalhe-status"></span></span>
             </div>
           </div>
 
           <div class="panel-grid">
             <div class="panel-section">
-              <span class="panel-label">Title</span>
-              <div class="panel-value" id="detalhe-title"></div>
-            </div>
-            <div class="panel-section">
               <span class="panel-label">Category</span>
-              <div class="panel-value" id="detalhe-category"></div>
+              <div id="detalhe-category" class="panel-value"></div>
             </div>
             <div class="panel-section">
               <span class="panel-label">Region/Site</span>
-              <div class="panel-value" id="detalhe-region_plant"></div>
+              <div id="detalhe-region_plant" class="panel-value"></div>
             </div>
             <div class="panel-section">
               <span class="panel-label">Responsible</span>
-              <div class="panel-value" id="detalhe-responsible"></div>
+              <div id="detalhe-responsible" class="panel-value"></div>
+            </div>
+            <div class="panel-section">
+              <span class="panel-label">Comments</span>
+              <div id="detalhe-comentario" class="panel-value"></div>
             </div>
             <div class="panel-section full">
               <span class="panel-label">Description</span>
-              <div class="panel-value" id="detalhe-desc"></div>
+              <div id="detalhe-desc" class="panel-value"></div>
             </div>
             <div class="panel-section full">
               <span class="panel-label">Steps</span>
-              <div class="panel-value" id="detalhe-steps"></div>
-            </div>
-            <div class="panel-section full">
-              <span class="panel-label">Comments</span>
-              <div class="panel-value" id="detalhe-comentario"></div>
+              <div id="detalhe-steps" class="panel-value"></div>
             </div>
           </div>
 
-          <div id="acoes" class="panel-actions mt-3"></div>
+          <div id="acoes" class="panel-section mt-3"></div>
         </div>
       </aside>
     </div>
-  </main>
+  </section>
+</main>
 </div>
 	
 
@@ -382,6 +394,7 @@ const supabase = createClient('https://qnxvprptwczutzojjyve.supabase.co', 'eyJhb
 let tabelaAtual = 'selected';
 let currentUser = null;
 let currentUserData = null;
+let selectedRowId = null;
 
 async function initTracker() {
   currentUser = await getLoggedUser();
@@ -403,7 +416,7 @@ function bindEvents() {
     tabelaAtual = 'selected';
     updateSourceButtons();
     resetFilters();
-    document.getElementById('detalhes-pratica').style.display = 'none';
+    clearSelection();
     await fetchData();
   });
 
@@ -411,7 +424,7 @@ function bindEvents() {
     tabelaAtual = 'submitted';
     updateSourceButtons();
     resetFilters();
-    document.getElementById('detalhes-pratica').style.display = 'none';
+    clearSelection();
     await fetchData();
   });
 
@@ -445,6 +458,19 @@ function resetFilters() {
   document.getElementById('filter-location').innerHTML = '<option value="">All</option>';
 }
 
+function clearSelection() {
+  selectedRowId = null;
+  document.getElementById('selection-placeholder').style.display = 'block';
+  document.getElementById('detalhes-pratica').style.display = 'none';
+  document.querySelectorAll('#tabela-atividades tbody tr.main-row').forEach(row => row.classList.remove('table-active'));
+}
+
+function markSelectedRow(id) {
+  document.querySelectorAll('#tabela-atividades tbody tr.main-row').forEach(row => {
+    row.classList.toggle('table-active', row.getAttribute('data-id') === String(id));
+  });
+}
+
 async function fetchData() {
   let query;
   if (tabelaAtual === 'selected') {
@@ -465,6 +491,7 @@ async function fetchData() {
 function renderTable(data) {
   const tbody = document.querySelector('#tabela-atividades tbody');
   tbody.innerHTML = '';
+  clearSelection();
 
   const categories = new Set();
   const statuses = new Set();
@@ -495,27 +522,20 @@ function renderTable(data) {
       <td>${actionCell}</td>
     `;
 
-    const detailRow = document.createElement('tr');
-    detailRow.classList.add('detail-row');
-    detailRow.style.display = 'none';
-    detailRow.innerHTML = `
-      <td colspan="8" style="background:#f9f9f9; text-align:justify; padding:10px;">
-        <p><strong>Applicability:</strong> ${item.applicability || 'None'}</p>
-        <p><strong>Functional Area:</strong> ${item.functional_area || 'None'}</p>
-        <p><strong>Description:</strong> ${item.description || 'None'}</p>
-        <p><strong>Steps to Implement:</strong> ${item.steps || 'None'}</p>
-        <p><strong>Comments:</strong> ${item.comments || item.auditor_comment || 'None'}</p>
-      </td>
-    `;
+    mainRow.classList.add('main-row');
 
     mainRow.addEventListener('click', (e) => {
       if (e.target.tagName.toLowerCase() === 'button' || e.target.closest('button') || e.target.tagName.toLowerCase() === 'a') return;
+      if (selectedRowId === item.id) {
+        clearSelection();
+        return;
+      }
+      selectedRowId = item.id;
+      markSelectedRow(item.id);
       mostrarDetalhes(item);
-      detailRow.style.display = detailRow.style.display === 'none' ? 'table-row' : 'none';
     });
 
     tbody.appendChild(mainRow);
-    tbody.appendChild(detailRow);
 
     if (item.category) categories.add(item.category);
     if (item.status) statuses.add(item.status);
@@ -544,10 +564,8 @@ function applyFilters() {
   const location = document.getElementById('filter-location').value;
   const search = document.getElementById('searchInput').value.toLowerCase();
 
-  const rows = document.querySelectorAll('#tabela-atividades tbody tr');
-  for (let i = 0; i < rows.length; i += 2) {
-    const mainRow = rows[i];
-    const detailRow = rows[i + 1];
+  const rows = document.querySelectorAll('#tabela-atividades tbody tr.main-row');
+  rows.forEach(mainRow => {
     const cells = mainRow.querySelectorAll('td');
     const text = Array.from(cells).map(cell => cell.textContent.toLowerCase()).join(' ');
     const cat = cells[3]?.textContent || '';
@@ -560,8 +578,10 @@ function applyFilters() {
                  (!location || loc === location);
 
     mainRow.style.display = show ? '' : 'none';
-    if (detailRow) detailRow.style.display = 'none';
-  }
+    if (!show && selectedRowId !== null && mainRow.getAttribute('data-id') === String(selectedRowId)) {
+      clearSelection();
+    }
+  });
 }
 
 window.filterTable = applyFilters;
@@ -576,13 +596,14 @@ window.removerAtividade = async function(botao) {
     alert('Error removing best practice');
   } else {
     alert('Best Practice removed!');
-    document.getElementById('detalhes-pratica').style.display = 'none';
+    clearSelection();
     await fetchData();
   }
 };
 
 window.mostrarDetalhes = function(item) {
   document.getElementById('detalhe-title').innerText = item.title || '';
+  document.getElementById('selection-placeholder').style.display = 'none';
   document.getElementById('detalhe-category').innerText = item.category || '';
   document.getElementById('detalhe-desc').innerText = item.description || '';
   document.getElementById('detalhe-steps').innerText = item.steps || '';
@@ -615,6 +636,23 @@ window.mostrarDetalhes = function(item) {
     acoes.innerHTML = `<div class="alert alert-light border">This section shows all ideas submitted by the logged-in user.</div>`;
   }
 
+  const extraMeta = document.getElementById('detalhe-extra-meta');
+  if (extraMeta) extraMeta.remove();
+  const metaWrap = document.createElement('div');
+  metaWrap.id = 'detalhe-extra-meta';
+  metaWrap.className = 'panel-grid mt-2';
+  metaWrap.innerHTML = `
+    <div class="panel-section full">
+      <span class="panel-label">Applicability</span>
+      <div class="panel-value">${item.applicability || 'None'}</div>
+    </div>
+    <div class="panel-section full">
+      <span class="panel-label">Functional Area</span>
+      <div class="panel-value">${item.functional_area || 'None'}</div>
+    </div>
+  `;
+  document.getElementById('acoes').before(metaWrap);
+
   document.getElementById('detalhes-pratica').style.display = 'block';
 };
 
@@ -624,7 +662,7 @@ window.iniciarImplementacao = async function(id) {
     alert('Erro ao iniciar implementação.');
   } else {
     alert('Implementation Started!');
-    document.getElementById('detalhes-pratica').style.display = 'none';
+    clearSelection();
     await fetchData();
   }
 };
@@ -635,7 +673,7 @@ window.cancelaImplementacao = async function(id) {
     alert('Erro ao cancelar implementação.');
   } else {
     alert('Cancelled!');
-    document.getElementById('detalhes-pratica').style.display = 'none';
+    clearSelection();
     await fetchData();
   }
 };
@@ -666,7 +704,7 @@ window.submeterImplementacao = async function(id) {
     alert('Erro ao salvar implementação: ' + error.message);
   } else {
     alert('Implementation Submitted!');
-    document.getElementById('detalhes-pratica').style.display = 'none';
+    clearSelection();
     await fetchData();
   }
 };
